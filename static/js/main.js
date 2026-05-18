@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    let psnrChart = null;
+
     $('#quality-input').on('input', function() {
         $('#quality-val').text($(this).val());
     });
@@ -51,6 +53,9 @@ $(document).ready(function() {
                 const ratio = (data.huffman_stats.original_bits / data.huffman_stats.encoded_bits).toFixed(2);
                 $('#stat-ratio').text(ratio + ':1');
                 $('#stat-psnr').text(data.psnr.toFixed(2) + ' dB');
+
+                // Update PSNR Chart
+                updatePsnrChart(data.psnr_plot_data, quality);
             },
             error: function(xhr, status, error) {
                 $('#loading').hide();
@@ -59,4 +64,46 @@ $(document).ready(function() {
             }
         });
     });
+
+    function updatePsnrChart(plotData, currentQuality) {
+        const ctx = document.getElementById('psnr-chart').getContext('2d');
+        const labels = plotData.map(d => d.quality);
+        const values = plotData.map(d => d.psnr);
+
+        if (psnrChart) {
+            psnrChart.destroy();
+        }
+
+        psnrChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'PSNR (dB)',
+                    data: values,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.1,
+                    pointBackgroundColor: labels.map(q => q == currentQuality ? 'red' : 'rgb(75, 192, 192)'),
+                    pointRadius: labels.map(q => q == currentQuality ? 6 : 3)
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Quality'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'PSNR (dB)'
+                        }
+                    }
+                }
+            }
+        });
+    }
 });

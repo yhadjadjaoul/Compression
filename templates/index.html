@@ -107,7 +107,7 @@
                 <h3>4. Entropy Coding Stats (RLE & Huffman)</h3>
                 <p>Quantized coefficients are zigzag-scanned, run-length encoded, and finally Huffman coded.</p>
                 <div class="row">
-                    <div class="col-md-8 mx-auto">
+                    <div class="col-md-6">
                         <table class="table">
                             <tbody>
                                 <tr>
@@ -131,11 +131,15 @@
                                     <td id="stat-ratio">-</td>
                                 </tr>
                                 <tr>
-                                    <th>PSNR (Peak Signal-to-Noise Ratio)</th>
+                                    <th>PSNR (at current quality)</th>
                                     <td id="stat-psnr">-</td>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-center">PSNR vs. Quality Curve</h5>
+                        <canvas id="psnr-chart"></canvas>
                     </div>
                 </div>
             </div>
@@ -163,6 +167,7 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/static/js/main.js"></script>
 </body>
 </html>
