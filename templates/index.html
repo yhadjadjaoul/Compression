@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JPEG Compression Visualizer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .step-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .img-preview {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #eee;
+        }
+        .progress-bar-container {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="text-center mb-4">JPEG Compression Visualizer</h1>
+        <p class="lead text-center mb-5">Step-by-step modular JPEG encoder for educational purposes.</p>
+
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <form id="upload-form">
+                            <div class="mb-3">
+                                <label for="image-input" class="form-label">Select Image (BMP/JPG/PNG)</label>
+                                <input type="file" class="form-control" id="image-input" accept="image/*" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quality-input" class="form-label">JPEG Quality: <span id="quality-val">50</span></label>
+                                <input type="range" class="form-range" id="quality-input" min="1" max="100" value="50">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100" id="submit-btn">Process Image</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="results" style="display: none;">
+            <div class="step-container bg-white shadow-sm">
+                <h3>1. Input Image</h3>
+                <div class="row">
+                    <div class="col-md-6 text-center">
+                        <h5>Original (Padded)</h5>
+                        <img id="img-original" class="img-preview" src="" alt="Original">
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-container bg-white shadow-sm">
+                <h3>2. RGB to YUV Transformation</h3>
+                <p>The image is converted from RGB to the YCbCr color space. Luminance (Y) and Chrominance (Cb, Cr) are separated.</p>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <h6>Y (Luminance)</h6>
+                        <img id="img-y" class="img-preview" src="" alt="Y">
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h6>U (Cb - Blue-difference)</h6>
+                        <img id="img-u" class="img-preview" src="" alt="U">
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h6>V (Cr - Red-difference)</h6>
+                        <img id="img-v" class="img-preview" src="" alt="V">
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-container bg-white shadow-sm">
+                <h3>3. DCT Transformation (Y Channel Visualization)</h3>
+                <p>2D Discrete Cosine Transform is applied to each 8x8 block. Low frequencies are concentrated in the top-left corner.</p>
+                <div class="row">
+                    <div class="col-md-6 text-center mx-auto">
+                        <img id="img-dct" class="img-preview" src="" alt="DCT">
+                        <p class="text-muted small">Log-scaled for visualization</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-container bg-white shadow-sm">
+                <h3>4. Entropy Coding Stats (RLE & Huffman)</h3>
+                <p>Quantized coefficients are zigzag-scanned, run-length encoded, and finally Huffman coded.</p>
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Total Symbols</th>
+                                    <td id="stat-total-symbols">-</td>
+                                </tr>
+                                <tr>
+                                    <th>Unique Symbols</th>
+                                    <td id="stat-unique-symbols">-</td>
+                                </tr>
+                                <tr>
+                                    <th>Compressed Size (bits)</th>
+                                    <td id="stat-encoded-bits">-</td>
+                                </tr>
+                                <tr>
+                                    <th>Estimated Original Size (bits)</th>
+                                    <td id="stat-original-bits">-</td>
+                                </tr>
+                                <tr>
+                                    <th>Compression Ratio</th>
+                                    <td id="stat-ratio">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-container bg-white shadow-sm">
+                <h3>5. Final Reconstruction</h3>
+                <p>The image is reconstructed by reversing the steps (Dequantization, IDCT, and YUV to RGB).</p>
+                <div class="row">
+                    <div class="col-md-6 text-center mx-auto">
+                        <img id="img-reconstructed" class="img-preview" src="" alt="Reconstructed">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading" class="text-center" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Processing blocks... this may take a moment for large images.</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
