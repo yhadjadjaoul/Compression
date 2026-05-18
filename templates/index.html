@@ -49,11 +49,26 @@
 
         <div id="results" style="display: none;">
             <div class="step-container bg-white shadow-sm">
-                <h3>1. Input Image</h3>
-                <div class="row">
-                    <div class="col-md-6 text-center">
+                <h3>1. Input Image & RGB Decomposition</h3>
+                <p>The original image is shown below, followed by its decomposition into Red, Green, and Blue channels.</p>
+                <div class="row mb-4">
+                    <div class="col-md-6 text-center mx-auto">
                         <h5>Original (Padded)</h5>
                         <img id="img-original" class="img-preview" src="" alt="Original">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <h6>Red Channel</h6>
+                        <img id="img-r" class="img-preview" src="" alt="Red">
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h6>Green Channel</h6>
+                        <img id="img-g" class="img-preview" src="" alt="Green">
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h6>Blue Channel</h6>
+                        <img id="img-b" class="img-preview" src="" alt="Blue">
                     </div>
                 </div>
             </div>
@@ -115,6 +130,10 @@
                                     <th>Compression Ratio</th>
                                     <td id="stat-ratio">-</td>
                                 </tr>
+                                <tr>
+                                    <th>PSNR (Peak Signal-to-Noise Ratio)</th>
+                                    <td id="stat-psnr">-</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -127,6 +146,9 @@
                 <div class="row">
                     <div class="col-md-6 text-center mx-auto">
                         <img id="img-reconstructed" class="img-preview" src="" alt="Reconstructed">
+                        <div class="mt-3">
+                            <a id="download-link" class="btn btn-success" download="reconstructed.png">Download Reconstructed Image</a>
+                        </div>
                     </div>
                 </div>
             </div>

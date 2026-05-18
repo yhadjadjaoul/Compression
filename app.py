@@ -60,11 +60,15 @@ def process():
     # Prepare data for frontend
     response_data = {
         "original": array_to_base64_img(results["original"]),
+        "r_channel": array_to_base64_img(results["r_channel"]),
+        "g_channel": array_to_base64_img(results["g_channel"]),
+        "b_channel": array_to_base64_img(results["b_channel"]),
         "y_channel": array_to_base64_img(results["y_channel"]),
         "u_channel": array_to_base64_img(results["u_channel"]),
         "v_channel": array_to_base64_img(results["v_channel"]),
         "dct_y": dct_to_base64_img(results["dct"][:, :, 0]),
         "reconstructed": array_to_base64_img(results["reconstructed_rgb"]),
+        "psnr": float(results["psnr"]),
         "huffman_stats": results["huffman_stats"]
     }
 
