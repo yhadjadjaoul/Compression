@@ -40,7 +40,8 @@ def get_quantization_table(quality, is_luminance=True):
 
     table = LUMINANCE_TABLE if is_luminance else CHROMINANCE_TABLE
     scaled_table = np.floor((table * scale + 50) / 100)
-    scaled_table[scaled_table == 0] = 1 # Avoid division by zero
+    # Clip values to [1, 255] range as per standard
+    scaled_table = np.clip(scaled_table, 1, 255)
     return scaled_table
 
 def quantize(block, table):
