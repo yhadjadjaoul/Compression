@@ -52,6 +52,8 @@ def quantization_preview():
     return jsonify({
         "original": array_to_base64_img(results["original"]),
         "reconstructed": array_to_base64_img(results["reconstructed_rgb"]),
+        "reconstructed_bmp": array_to_base64_img(results["reconstructed_rgb"], format="BMP"),
+        "reconstructed_jpg": array_to_base64_img(results["reconstructed_rgb"], format="JPEG"),
         "psnr": float(results["psnr"])
     })
 

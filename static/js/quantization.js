@@ -72,6 +72,12 @@ $(document).ready(function() {
                 $('#preview-original-container').html(`<img src="data:image/png;base64,${data.original}" class="img-preview shadow-sm">`);
                 $('#preview-reconstructed-container').html(`<img src="data:image/png;base64,${data.reconstructed}" class="img-preview shadow-sm">`);
                 $('#psnr-val').text(data.psnr.toFixed(2));
+
+                // Update download links
+                $('#dl-reconstructed-png').attr('href', 'data:image/png;base64,' + data.reconstructed);
+                $('#dl-reconstructed-bmp').attr('href', 'data:image/bmp;base64,' + data.reconstructed_bmp);
+                $('#dl-reconstructed-jpg').attr('href', 'data:image/jpeg;base64,' + data.reconstructed_jpg);
+                $('#download-links').show();
             },
             error: function(xhr, status, error) {
                 $('#loading-spinner').hide();
