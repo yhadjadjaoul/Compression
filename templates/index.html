@@ -54,21 +54,33 @@
                 <div class="row mb-4">
                     <div class="col-md-6 text-center mx-auto">
                         <h5>Original (Padded)</h5>
-                        <img id="img-original" class="img-preview" src="" alt="Original">
+                        <img id="img-original" class="img-preview mb-2" src="" alt="Original">
+                        <div>
+                            <a id="dl-original" class="btn btn-sm btn-outline-secondary" download="original.png">Download PNG</a>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <h6>Red Channel</h6>
-                        <img id="img-r" class="img-preview" src="" alt="Red">
+                        <img id="img-r" class="img-preview mb-2" src="" alt="Red">
+                        <div>
+                            <a id="dl-r" class="btn btn-sm btn-outline-secondary" download="red_channel.png">Download PNG</a>
+                        </div>
                     </div>
                     <div class="col-md-4 text-center">
                         <h6>Green Channel</h6>
-                        <img id="img-g" class="img-preview" src="" alt="Green">
+                        <img id="img-g" class="img-preview mb-2" src="" alt="Green">
+                        <div>
+                            <a id="dl-g" class="btn btn-sm btn-outline-secondary" download="green_channel.png">Download PNG</a>
+                        </div>
                     </div>
                     <div class="col-md-4 text-center">
                         <h6>Blue Channel</h6>
-                        <img id="img-b" class="img-preview" src="" alt="Blue">
+                        <img id="img-b" class="img-preview mb-2" src="" alt="Blue">
+                        <div>
+                            <a id="dl-b" class="btn btn-sm btn-outline-secondary" download="blue_channel.png">Download PNG</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -79,15 +91,24 @@
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <h6>Y (Luminance)</h6>
-                        <img id="img-y" class="img-preview" src="" alt="Y">
+                        <img id="img-y" class="img-preview mb-2" src="" alt="Y">
+                        <div>
+                            <a id="dl-y" class="btn btn-sm btn-outline-secondary" download="y_channel.png">Download PNG</a>
+                        </div>
                     </div>
                     <div class="col-md-4 text-center">
                         <h6>U (Cb - Blue-difference)</h6>
-                        <img id="img-u" class="img-preview" src="" alt="U">
+                        <img id="img-u" class="img-preview mb-2" src="" alt="U">
+                        <div>
+                            <a id="dl-u" class="btn btn-sm btn-outline-secondary" download="u_channel.png">Download PNG</a>
+                        </div>
                     </div>
                     <div class="col-md-4 text-center">
                         <h6>V (Cr - Red-difference)</h6>
-                        <img id="img-v" class="img-preview" src="" alt="V">
+                        <img id="img-v" class="img-preview mb-2" src="" alt="V">
+                        <div>
+                            <a id="dl-v" class="btn btn-sm btn-outline-secondary" download="v_channel.png">Download PNG</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -97,8 +118,11 @@
                 <p>2D Discrete Cosine Transform is applied to each 8x8 block. Low frequencies are concentrated in the top-left corner.</p>
                 <div class="row">
                     <div class="col-md-6 text-center mx-auto">
-                        <img id="img-dct" class="img-preview" src="" alt="DCT">
+                        <img id="img-dct" class="img-preview mb-2" src="" alt="DCT">
                         <p class="text-muted small">Log-scaled for visualization</p>
+                        <div>
+                            <a id="dl-dct" class="btn btn-sm btn-outline-secondary" download="dct_visualization.png">Download PNG</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -149,9 +173,10 @@
                 <p>The image is reconstructed by reversing the steps (Dequantization, IDCT, and YUV to RGB).</p>
                 <div class="row">
                     <div class="col-md-6 text-center mx-auto">
-                        <img id="img-reconstructed" class="img-preview" src="" alt="Reconstructed">
+                        <img id="img-reconstructed" class="img-preview mb-2" src="" alt="Reconstructed">
                         <div class="mt-3">
-                            <a id="download-link" class="btn btn-success" download="reconstructed.png">Download Reconstructed Image</a>
+                            <a id="dl-reconstructed-png" class="btn btn-outline-success" download="reconstructed.png">Download PNG</a>
+                            <a id="dl-reconstructed-jpg" class="btn btn-success" download="reconstructed.jpg">Download JPG</a>
                         </div>
                     </div>
                 </div>

@@ -42,7 +42,18 @@ $(document).ready(function() {
                 $('#img-v').attr('src', 'data:image/png;base64,' + data.v_channel);
                 $('#img-dct').attr('src', 'data:image/png;base64,' + data.dct_y);
                 $('#img-reconstructed').attr('src', 'data:image/png;base64,' + data.reconstructed);
-                $('#download-link').attr('href', 'data:image/png;base64,' + data.reconstructed);
+
+                // Update download links
+                $('#dl-original').attr('href', 'data:image/png;base64,' + data.original);
+                $('#dl-r').attr('href', 'data:image/png;base64,' + data.r_channel);
+                $('#dl-g').attr('href', 'data:image/png;base64,' + data.g_channel);
+                $('#dl-b').attr('href', 'data:image/png;base64,' + data.b_channel);
+                $('#dl-y').attr('href', 'data:image/png;base64,' + data.y_channel);
+                $('#dl-u').attr('href', 'data:image/png;base64,' + data.u_channel);
+                $('#dl-v').attr('href', 'data:image/png;base64,' + data.v_channel);
+                $('#dl-dct').attr('href', 'data:image/png;base64,' + data.dct_y);
+                $('#dl-reconstructed-png').attr('href', 'data:image/png;base64,' + data.reconstructed);
+                $('#dl-reconstructed-jpg').attr('href', 'data:image/jpeg;base64,' + data.reconstructed_jpg);
 
                 // Update stats
                 $('#stat-total-symbols').text(data.huffman_stats.total_symbols);

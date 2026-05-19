@@ -2,6 +2,7 @@ import numpy as np
 from .conversions import rgb_to_yuv, yuv_to_rgb
 from .dct import dct_2d, idct_2d
 from .quantization import get_quantization_table, quantize, dequantize
+from .metrics import calculate_psnr
 from .zigzag import zigzag_scan, inverse_zigzag_scan
 from .entropy_coding import run_length_encode, huffman_encode
 
@@ -76,12 +77,7 @@ class JPEGEncoder:
         results["reconstructed_rgb"] = yuv_to_rgb(results["reconstructed_yuv"])
 
         # PSNR Calculation
-        mse = np.mean((padded_rgb.astype(np.float32) - results["reconstructed_rgb"].astype(np.float32)) ** 2)
-        if mse == 0:
-            results["psnr"] = 100.0
-        else:
-            max_pixel = 255.0
-            results["psnr"] = 20 * np.log10(max_pixel / np.sqrt(mse))
+        results["psnr"] = calculate_psnr(padded_rgb, results["reconstructed_rgb"])
 
         # Entropy coding stats (simplified)
         symbols = []
