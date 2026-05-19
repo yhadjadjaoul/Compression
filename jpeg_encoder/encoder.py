@@ -2,7 +2,7 @@ import numpy as np
 from .conversions import rgb_to_yuv, yuv_to_rgb
 from .dct import dct_2d, idct_2d
 from .quantization import get_quantization_table, quantize, dequantize
-from .metrics import calculate_psnr
+from .metrics import calculate_psnr, calculate_ssim, calculate_vif, calculate_vmaf
 from .zigzag import zigzag_scan, inverse_zigzag_scan
 from .entropy_coding import run_length_encode, huffman_encode
 
@@ -40,7 +40,10 @@ class JPEGEncoder:
             "reconstructed_rgb": np.zeros_like(padded_rgb),
             "rle_stats": [],
             "huffman_stats": {},
-            "psnr": 0.0
+            "psnr": 0.0,
+            "ssim": 0.0,
+            "vif": 0.0,
+            "vmaf": 0.0
         }
 
         all_rle_data = []
@@ -76,8 +79,11 @@ class JPEGEncoder:
         # Final reconstruction
         results["reconstructed_rgb"] = yuv_to_rgb(results["reconstructed_yuv"])
 
-        # PSNR Calculation
+        # Metrics Calculation
         results["psnr"] = calculate_psnr(padded_rgb, results["reconstructed_rgb"])
+        results["ssim"] = calculate_ssim(padded_rgb, results["reconstructed_rgb"])
+        results["vif"] = calculate_vif(padded_rgb, results["reconstructed_rgb"])
+        results["vmaf"] = calculate_vmaf(padded_rgb, results["reconstructed_rgb"])
 
         # Entropy coding stats (simplified)
         symbols = []
