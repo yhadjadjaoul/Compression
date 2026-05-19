@@ -163,15 +163,26 @@
                                     <td id="stat-ratio">-</td>
                                 </tr>
                                 <tr>
-                                    <th>PSNR (at current quality)</th>
-                                    <td id="stat-psnr">-</td>
+                                    <th>Quality Metric</th>
+                                    <td>
+                                        <select id="metric-select" class="form-select form-select-sm">
+                                            <option value="psnr">PSNR (Peak Signal-to-Noise Ratio)</option>
+                                            <option value="ssim">SSIM (Structural Similarity)</option>
+                                            <option value="vif">VIF (Visual Information Fidelity)</option>
+                                            <option value="vmaf">VMAF (Simplified Fusion Score)</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Score (at current quality)</th>
+                                    <td id="stat-score">-</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="col-md-6">
-                        <h5 class="text-center">PSNR vs. Quality Curve</h5>
-                        <canvas id="psnr-chart"></canvas>
+                        <h5 class="text-center"><span id="chart-title">PSNR</span> vs. Quality Curve</h5>
+                        <canvas id="metrics-chart"></canvas>
                     </div>
                 </div>
             </div>

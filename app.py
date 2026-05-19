@@ -103,13 +103,19 @@ def process():
     encoder = JPEGEncoder(quality=quality)
     results = encoder.process_image(img_array)
 
-    # Generate PSNR vs Quality data
-    psnr_plot_data = []
-    qualities = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    # Generate quality metrics vs Quality data
+    metrics_plot_data = []
+    qualities = [10, 25, 50, 75, 100] # Reduced number of points for performance
     for q in qualities:
         temp_encoder = JPEGEncoder(quality=q)
         temp_results = temp_encoder.process_image(img_array)
-        psnr_plot_data.append({"quality": q, "psnr": float(temp_results["psnr"])})
+        metrics_plot_data.append({
+            "quality": q,
+            "psnr": float(temp_results["psnr"]),
+            "ssim": float(temp_results["ssim"]),
+            "vif": float(temp_results["vif"]),
+            "vmaf": float(temp_results["vmaf"])
+        })
 
     # Prepare data for frontend
     response_data = {
@@ -133,7 +139,10 @@ def process():
         "reconstructed_bmp": array_to_base64_img(results["reconstructed_rgb"], format="BMP"),
         "reconstructed_jpg": array_to_base64_img(results["reconstructed_rgb"], format="JPEG"),
         "psnr": float(results["psnr"]),
-        "psnr_plot_data": psnr_plot_data,
+        "ssim": float(results["ssim"]),
+        "vif": float(results["vif"]),
+        "vmaf": float(results["vmaf"]),
+        "metrics_plot_data": metrics_plot_data,
         "huffman_stats": results["huffman_stats"]
     }
 

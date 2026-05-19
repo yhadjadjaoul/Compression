@@ -1,8 +1,15 @@
 $(document).ready(function() {
-    let psnrChart = null;
+    let metricsChart = null;
+    let currentData = null;
 
     $('#quality-input').on('input', function() {
         $('#quality-val').text($(this).val());
+    });
+
+    $('#metric-select').on('change', function() {
+        if (currentData) {
+            updateUI(currentData);
+        }
     });
 
     $('#upload-form').on('submit', function(e) {
@@ -28,6 +35,7 @@ $(document).ready(function() {
             contentType: false,
             processData: false,
             success: function(data) {
+                currentData = data;
                 $('#loading').hide();
                 $('#results').show();
                 $('#submit-btn').prop('disabled', false);
@@ -72,10 +80,8 @@ $(document).ready(function() {
 
                 const ratio = (data.huffman_stats.original_bits / data.huffman_stats.encoded_bits).toFixed(2);
                 $('#stat-ratio').text(ratio + ':1');
-                $('#stat-psnr').text(data.psnr.toFixed(2) + ' dB');
 
-                // Update PSNR Chart
-                updatePsnrChart(data.psnr_plot_data, quality);
+                updateUI(data);
             },
             error: function(xhr, status, error) {
                 $('#loading').hide();
@@ -85,21 +91,34 @@ $(document).ready(function() {
         });
     });
 
-    function updatePsnrChart(plotData, currentQuality) {
-        const ctx = document.getElementById('psnr-chart').getContext('2d');
-        const labels = plotData.map(d => d.quality);
-        const values = plotData.map(d => d.psnr);
+    function updateUI(data) {
+        const metric = $('#metric-select').val();
+        const quality = $('#quality-input').val();
 
-        if (psnrChart) {
-            psnrChart.destroy();
+        let score = data[metric];
+        let unit = metric === 'psnr' ? ' dB' : '';
+        $('#stat-score').text(score.toFixed(4) + unit);
+
+        $('#chart-title').text($('#metric-select option:selected').text().split(' ')[0]);
+        updateMetricChart(data.metrics_plot_data, quality, metric);
+    }
+
+    function updateMetricChart(plotData, currentQuality, metric) {
+        const ctx = document.getElementById('metrics-chart').getContext('2d');
+        const labels = plotData.map(d => d.quality);
+        const values = plotData.map(d => d[metric]);
+        const labelName = $('#metric-select option:selected').text().split(' ')[0];
+
+        if (metricsChart) {
+            metricsChart.destroy();
         }
 
-        psnrChart = new Chart(ctx, {
+        metricsChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'PSNR (dB)',
+                    label: labelName,
                     data: values,
                     borderColor: 'rgb(75, 192, 192)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -119,7 +138,7 @@ $(document).ready(function() {
                     y: {
                         title: {
                             display: true,
-                            text: 'PSNR (dB)'
+                            text: labelName
                         }
                     }
                 }
