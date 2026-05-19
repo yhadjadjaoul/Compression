@@ -5,12 +5,55 @@ import io
 import base64
 from jpeg_encoder.encoder import JPEGEncoder
 from jpeg_encoder.conversions import yuv_to_rgb
+from jpeg_encoder.quantization import get_quantization_table, LUMINANCE_TABLE
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/quantization')
+def quantization_lab():
+    return render_template('quantization.html')
+
+@app.route('/api/quantization_data', methods=['POST'])
+def quantization_data():
+    data = request.get_json()
+    quality = int(data.get('quality', 50))
+    base_table = LUMINANCE_TABLE.astype(int).tolist()
+    resulting_table = get_quantization_table(quality, is_luminance=True).astype(int).tolist()
+
+    if quality < 50:
+        scale = 5000 / quality
+    else:
+        scale = 200 - 2 * quality
+
+    return jsonify({
+        "base_table": base_table,
+        "resulting_table": resulting_table,
+        "scale": scale / 100.0
+    })
+
+@app.route('/api/quantization_preview', methods=['POST'])
+def quantization_preview():
+    if 'image' not in request.files:
+        return jsonify({"error": "No image uploaded"}), 400
+
+    file = request.files['image']
+    quality = int(request.form.get('quality', 50))
+
+    img = Image.open(file.stream).convert('RGB')
+    img_array = np.array(img)
+
+    encoder = JPEGEncoder(quality=quality)
+    results = encoder.process_image(img_array)
+
+    return jsonify({
+        "original": array_to_base64_img(results["original"]),
+        "reconstructed": array_to_base64_img(results["reconstructed_rgb"]),
+        "psnr": float(results["psnr"])
+    })
 
 def array_to_base64_img(arr, format="PNG"):
     """
