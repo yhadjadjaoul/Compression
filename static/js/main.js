@@ -45,14 +45,23 @@ $(document).ready(function() {
 
                 // Update download links
                 $('#dl-original').attr('href', 'data:image/png;base64,' + data.original);
+                $('#dl-original-bmp').attr('href', 'data:image/bmp;base64,' + data.original_bmp);
                 $('#dl-r').attr('href', 'data:image/png;base64,' + data.r_channel);
+                $('#dl-r-bmp').attr('href', 'data:image/bmp;base64,' + data.r_channel_bmp);
                 $('#dl-g').attr('href', 'data:image/png;base64,' + data.g_channel);
+                $('#dl-g-bmp').attr('href', 'data:image/bmp;base64,' + data.g_channel_bmp);
                 $('#dl-b').attr('href', 'data:image/png;base64,' + data.b_channel);
+                $('#dl-b-bmp').attr('href', 'data:image/bmp;base64,' + data.b_channel_bmp);
                 $('#dl-y').attr('href', 'data:image/png;base64,' + data.y_channel);
+                $('#dl-y-bmp').attr('href', 'data:image/bmp;base64,' + data.y_channel_bmp);
                 $('#dl-u').attr('href', 'data:image/png;base64,' + data.u_channel);
+                $('#dl-u-bmp').attr('href', 'data:image/bmp;base64,' + data.u_channel_bmp);
                 $('#dl-v').attr('href', 'data:image/png;base64,' + data.v_channel);
+                $('#dl-v-bmp').attr('href', 'data:image/bmp;base64,' + data.v_channel_bmp);
                 $('#dl-dct').attr('href', 'data:image/png;base64,' + data.dct_y);
+                $('#dl-dct-bmp').attr('href', 'data:image/bmp;base64,' + data.dct_y_bmp);
                 $('#dl-reconstructed-png').attr('href', 'data:image/png;base64,' + data.reconstructed);
+                $('#dl-reconstructed-bmp').attr('href', 'data:image/bmp;base64,' + data.reconstructed_bmp);
                 $('#dl-reconstructed-jpg').attr('href', 'data:image/jpeg;base64,' + data.reconstructed_jpg);
 
                 // Update stats

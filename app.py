@@ -60,12 +60,12 @@ def visualize_channel_arr(arr, channel_type):
 
     return vis
 
-def visualize_channel(arr, channel_type):
+def visualize_channel(arr, channel_type, format="PNG"):
     """
     Create a colored visualization of a single channel and return it as base64.
     """
     vis = visualize_channel_arr(arr, channel_type)
-    return array_to_base64_img(vis)
+    return array_to_base64_img(vis, format=format)
 
 def dct_to_arr(arr):
     """
@@ -83,11 +83,11 @@ def dct_to_arr(arr):
         arr_norm = arr_log * 0
     return arr_norm.astype(np.uint8)
 
-def dct_to_base64_img(arr):
+def dct_to_base64_img(arr, format="PNG"):
     """
     Visualize DCT coefficients by applying log scaling and return it as base64.
     """
-    return array_to_base64_img(dct_to_arr(arr))
+    return array_to_base64_img(dct_to_arr(arr), format=format)
 
 @app.route('/process', methods=['POST'])
 def process():
@@ -114,14 +114,23 @@ def process():
     # Prepare data for frontend
     response_data = {
         "original": array_to_base64_img(results["original"]),
+        "original_bmp": array_to_base64_img(results["original"], format="BMP"),
         "r_channel": visualize_channel(results["r_channel"], 'R'),
+        "r_channel_bmp": visualize_channel(results["r_channel"], 'R', format="BMP"),
         "g_channel": visualize_channel(results["g_channel"], 'G'),
+        "g_channel_bmp": visualize_channel(results["g_channel"], 'G', format="BMP"),
         "b_channel": visualize_channel(results["b_channel"], 'B'),
+        "b_channel_bmp": visualize_channel(results["b_channel"], 'B', format="BMP"),
         "y_channel": visualize_channel(results["y_channel"], 'Y'),
+        "y_channel_bmp": visualize_channel(results["y_channel"], 'Y', format="BMP"),
         "u_channel": visualize_channel(results["u_channel"], 'U'),
+        "u_channel_bmp": visualize_channel(results["u_channel"], 'U', format="BMP"),
         "v_channel": visualize_channel(results["v_channel"], 'V'),
+        "v_channel_bmp": visualize_channel(results["v_channel"], 'V', format="BMP"),
         "dct_y": dct_to_base64_img(results["dct"][:, :, 0]),
+        "dct_y_bmp": dct_to_base64_img(results["dct"][:, :, 0], format="BMP"),
         "reconstructed": array_to_base64_img(results["reconstructed_rgb"]),
+        "reconstructed_bmp": array_to_base64_img(results["reconstructed_rgb"], format="BMP"),
         "reconstructed_jpg": array_to_base64_img(results["reconstructed_rgb"], format="JPEG"),
         "psnr": float(results["psnr"]),
         "psnr_plot_data": psnr_plot_data,
