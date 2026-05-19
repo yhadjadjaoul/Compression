@@ -36,12 +36,12 @@ $(document).ready(function() {
                 renderMatrix('resulting-matrix', data.resulting_table);
                 $('#scale-factor').text('x ' + data.scale.toFixed(2));
 
-                // Update formula display if needed
+                // Update formula display
                 let scaleFormula = "";
                 if (quality < 50) {
-                    scaleFormula = `Qualité < 50 : S = 5000 / ${quality} = ${(5000/quality).toFixed(2)}`;
+                    scaleFormula = `Quality < 50: S = 5000 / ${quality} = ${(5000/quality).toFixed(2)}`;
                 } else {
-                    scaleFormula = `Qualité >= 50 : S = 200 - 2 * ${quality} = ${(200 - 2 * quality).toFixed(2)}`;
+                    scaleFormula = `Quality >= 50: S = 200 - 2 * ${quality} = ${(200 - 2 * quality).toFixed(2)}`;
                 }
                 $('#formula-scale').text(scaleFormula);
             }
@@ -50,7 +50,11 @@ $(document).ready(function() {
 
     function updatePreview() {
         if (!currentImage) return;
-        console.log("Updating preview for quality: " + $('#quality-input').val());
+
+        // Show loading spinner and clear previous reconstructed image
+        $('#loading-spinner').show();
+        $('#preview-reconstructed-container').empty();
+        $('#psnr-val').text('-');
 
         const quality = $('#quality-input').val();
         const formData = new FormData();
@@ -64,13 +68,15 @@ $(document).ready(function() {
             contentType: false,
             processData: false,
             success: function(data) {
-                console.log("Preview data received, PSNR: " + data.psnr);
+                $('#loading-spinner').hide();
                 $('#preview-original-container').html(`<img src="data:image/png;base64,${data.original}" class="img-preview shadow-sm">`);
                 $('#preview-reconstructed-container').html(`<img src="data:image/png;base64,${data.reconstructed}" class="img-preview shadow-sm">`);
                 $('#psnr-val').text(data.psnr.toFixed(2));
             },
             error: function(xhr, status, error) {
+                $('#loading-spinner').hide();
                 console.error("Error updating preview: " + error);
+                $('#preview-reconstructed-container').html(`<p class="text-danger">Error processing image</p>`);
             }
         });
     }
