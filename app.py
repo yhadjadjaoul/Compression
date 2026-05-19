@@ -12,9 +12,9 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-def array_to_base64_img(arr):
+def array_to_base64_img(arr, format="PNG"):
     """
-    Convert a numpy array to a base64 encoded PNG image for display.
+    Convert a numpy array to a base64 encoded image for display or download.
     """
     # Clip and convert to uint8 if necessary
     if arr.dtype != np.uint8:
@@ -22,12 +22,12 @@ def array_to_base64_img(arr):
 
     img = Image.fromarray(arr)
     buffered = io.BytesIO()
-    img.save(buffered, format="PNG")
+    img.save(buffered, format=format)
     return base64.b64encode(buffered.getvalue()).decode('utf-8')
 
-def visualize_channel(arr, channel_type):
+def visualize_channel_arr(arr, channel_type):
     """
-    Create a colored visualization of a single channel.
+    Create a colored visualization of a single channel and return it as a numpy array.
     channel_type: 'R', 'G', 'B', 'Y', 'U', 'V'
     """
     h, w = arr.shape
@@ -49,20 +49,27 @@ def visualize_channel(arr, channel_type):
         yuv[:, :, 0] = 128
         yuv[:, :, 1] = arr
         yuv[:, :, 2] = 128
-        return array_to_base64_img(yuv_to_rgb(yuv))
+        return yuv_to_rgb(yuv)
     elif channel_type == 'V':
         # Visualize V (Cr): Fix Y=128, U=128
         yuv = np.zeros((h, w, 3), dtype=np.float32)
         yuv[:, :, 0] = 128
         yuv[:, :, 1] = 128
         yuv[:, :, 2] = arr
-        return array_to_base64_img(yuv_to_rgb(yuv))
+        return yuv_to_rgb(yuv)
 
+    return vis
+
+def visualize_channel(arr, channel_type):
+    """
+    Create a colored visualization of a single channel and return it as base64.
+    """
+    vis = visualize_channel_arr(arr, channel_type)
     return array_to_base64_img(vis)
 
-def dct_to_base64_img(arr):
+def dct_to_arr(arr):
     """
-    Visualize DCT coefficients by applying log scaling.
+    Visualize DCT coefficients by applying log scaling and return it as a numpy array.
     """
     # Take the absolute value and apply log scaling for better visualization
     arr_abs = np.abs(arr)
@@ -74,7 +81,13 @@ def dct_to_base64_img(arr):
         arr_norm = (arr_log - arr_min) / (arr_max - arr_min) * 255
     else:
         arr_norm = arr_log * 0
-    return array_to_base64_img(arr_norm.astype(np.uint8))
+    return arr_norm.astype(np.uint8)
+
+def dct_to_base64_img(arr):
+    """
+    Visualize DCT coefficients by applying log scaling and return it as base64.
+    """
+    return array_to_base64_img(dct_to_arr(arr))
 
 @app.route('/process', methods=['POST'])
 def process():
@@ -109,6 +122,7 @@ def process():
         "v_channel": visualize_channel(results["v_channel"], 'V'),
         "dct_y": dct_to_base64_img(results["dct"][:, :, 0]),
         "reconstructed": array_to_base64_img(results["reconstructed_rgb"]),
+        "reconstructed_jpg": array_to_base64_img(results["reconstructed_rgb"], format="JPEG"),
         "psnr": float(results["psnr"]),
         "psnr_plot_data": psnr_plot_data,
         "huffman_stats": results["huffman_stats"]
